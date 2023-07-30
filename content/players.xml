@@ -1,0 +1,8 @@
+<players root="gfx/characters/costumes/" 
+         portraitroot="gfx/ui/stage/" 
+         nameimageroot="gfx/ui/boss/">
+	<player name="Pony" skin="character_Pony.png" trinket="52" hp="2" armor="4"
+          nameimage="playername_pony.png" 
+          portrait="playerportrait_pony.png" skinColor="4" costumeSuffix="pony"
+		  birthright="not done" />
+</players>		  

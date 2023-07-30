@@ -1,0 +1,4 @@
+# Ignore vscode config
+
+.luarc.json
+.vscode/
