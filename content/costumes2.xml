@@ -1,9 +1,13 @@
 <costumes anm2root="gfx/characters/">
 	<costume anm2path="PonyHair.anm2" type="none" priority="99" />
 	<costume anm2path="PonyBody.anm2" type="none" priority="-1" />
-	<costume anm2path="DragonHoard.anm2" type="none" priority="2" />
+	<costume anm2path="DragonHoard.anm2" type="none" priority="1" />
+	<costume anm2path="DragonHoard_ALT.anm2" type="none" priority="1" />
 	<costume anm2path="DragonWings.anm2" type="none" isFlying="true" priority="19" />
 	<costume anm2path="DragonWingsBrimstone.anm2" type="none" isFlying="true" priority="19"	/>
 	<costume anm2path="custom_infestation.anm2" type="none" priority="1" />
 	<costume anm2path="custom_libra.anm2" type="none" priority="1" />
+	<costume anm2path="custom_varicoseveins.anm2" type="none" priority="19" />
+	<!--  REPENTANCE BEGIN  -->
+	<costume anm2path="custom_uranus.anm2" type="none" priority="1" />
 </costumes>

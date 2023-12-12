@@ -1,6 +1,8 @@
 <ItemPools>
-	<Pool Name="Treasure">
-		<Item Name="Dragon Hoard" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
-		<Item Name="Dragon Wings" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+	<Pool Name="treasure">
+		<Item Name="Dragon Hoard" Weight="1" DecreaseBy="0.5" RemoveOn="0.1" />
+	</Pool>
+	<Pool Name="secret">
+		<Item Name="Dragon Wings" Weight="1" DecreaseBy="0.5" RemoveOn="0.1" />
 	</Pool>
 </ItemPools>

@@ -1,4 +1,4 @@
 <items gfxroot="gfx/items/" version="1">
     <passive id="1" name="Dragon Hoard" description="Take good care of your treasure" gfx="collectibles_dragonhoard.png" quality="3" coins="5" cache="damage" />
-	<active id="2" name="Dragon Wings" description="FLAP FLAP FLAP!" gfx="collectibles_dragonwings.png" quality="1" maxcharges="3" chargetype="normal" />
+	<active id="2" name="Dragon Wings" description="FLAP FLAP FLAP!" gfx="collectibles_dragonwings.png" quality="2" maxcharges="4" chargetype="normal" />
 </items>
