@@ -1,9 +1,11 @@
 local mod_items = require("scripts.mod_items")
-local pony = require("pony")
+local pony = require("scripts.pony")
 
 local mod_functions = {}
 
-function mod_functions.playerInit(player)
+function mod_functions.playerInit(entiy_player)
+  local player = Isaac.GetPlayer(0);
+
   if player:GetName() ~= "Pony" then
     return
   end
