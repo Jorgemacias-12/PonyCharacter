@@ -16,6 +16,10 @@ function mod_functions.playerInit(entiy_player)
 
 end
 
+function mod_functions.useDragonWings(collectibleType, charge, player)
+
+end
+
 function mod_functions.onUpdate()
 end
 
