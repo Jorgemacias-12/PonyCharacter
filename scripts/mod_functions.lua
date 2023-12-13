@@ -1,4 +1,4 @@
-local mod_items = require("mod_items")
+local mod_items = require("scripts.mod_items")
 local pony = require("pony")
 
 local mod_functions = {}
