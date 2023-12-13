@@ -13,6 +13,9 @@ function mod_functions.playerInit(entiy_player)
   player:AddCollectible(mod_items.DragonHoardItem, 0, true);
   player:AddNullCostume(pony.dragon_hoard_costume_id)
   player:AddNullCostume(pony.body_costume_id)
+  player:SetPocketActiveItem(mod_items.DragonWingsItem, 2, true)
+
+  pony.applyCostume(player)
 
 end
 
