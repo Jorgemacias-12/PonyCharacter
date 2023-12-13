@@ -19,8 +19,25 @@ function mod_functions.playerInit(entiy_player)
 
 end
 
-function mod_functions.useDragonWings(collectibleType, charge, player)
+function mod_functions.useDragonWings()
+  local player = Isaac.GetPlayer(0);
 
+  pony.UsedWings = true;
+
+  player:AddCacheFlags(CacheFlag.CACHE_FLYING)
+  player:AddCacheFlags(CacheFlag.CACHE_SPEED)
+  player:AddCacheFlags(CacheFlag.CACHE_TEARFLAG)
+  
+  if player:HasCollectible(CollectibleType.COLLECTIBLE_BRIMSTONE) then
+    player:AddNullCostume(pony.dragon_wings_brimstone_costume_id);
+  else
+    player:AddNullCostume(pony.dragon_wings_costume_id);
+  end
+
+  player:EvaluateItems()
+
+  -- Return true in other to play the animation
+  return true;
 end
 
 function mod_functions.onUpdate()
