@@ -1,5 +1,6 @@
 local mod_items = require("scripts.mod_items")
 local pony = require("scripts.pony")
+local utils = require("scripts.utils")
 
 local mod_functions = {}
 
@@ -23,7 +24,7 @@ function mod_functions.useDragonWings()
   local player = Isaac.GetPlayer(0);
 
   pony.UsedWings = true;
-
+  
   player:AddCacheFlags(CacheFlag.CACHE_FLYING)
   player:AddCacheFlags(CacheFlag.CACHE_SPEED)
   player:AddCacheFlags(CacheFlag.CACHE_TEARFLAG)
@@ -41,6 +42,45 @@ function mod_functions.useDragonWings()
 end
 
 function mod_functions.onUpdate()
+  local player = Isaac.GetPlayer(0);
+
+  if player:GetName() ~= "Pony" then
+    return;
+  end
+
+  if Game():GetLevel():GetCurrentRoom():GetFrameCount() ~= 1 then
+    return;
+  end
+
+  local flyingItems = {
+    CollectibleType.COLLECTIBLE_FATE,
+    CollectibleType.COLLECTIBLE_HOLY_GRAIL,
+    CollectibleType.COLLECTIBLE_DOGMA,
+    CollectibleType.COLLECTIBLE_LORD_OF_THE_PIT,
+    CollectibleType.COLLECTIBLE_REVELATION
+  }
+
+  if pony.UsedWings then
+
+    pony.UsedWings = false;
+
+    if utils.hasAnyCollectible(player, flyingItems) then
+      player:AddCacheFlags(CacheFlag.CACHE_SPEED)
+      player:AddCacheFlags(CacheFlag.CACHE_TEARFLAG)
+    
+    else
+      player.canFly = false;
+
+      player:TryRemoveNullCostume(pony.dragon_wings_costume_id)
+      player:TryRemoveNullCostume(pony.dragon_wings_brimstone_costume_id)
+      player:AddCacheFlags(CacheFlag.CACHE_FLYING)
+    end
+
+    player:AddCacheFlags(CacheFlag.CACHE_SPEED)
+    player:AddCacheFlags(CacheFlag.CACHE_TEARFLAG)
+    player:EvaluateItems()
+  end
+
 end
 
 function mod_functions.postPeffectUpdate()
