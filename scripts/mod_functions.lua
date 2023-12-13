@@ -24,7 +24,7 @@ function mod_functions.useDragonWings()
   local player = Isaac.GetPlayer(0);
 
   pony.UsedWings = true;
-  
+
   player:AddCacheFlags(CacheFlag.CACHE_FLYING)
   player:AddCacheFlags(CacheFlag.CACHE_SPEED)
   player:AddCacheFlags(CacheFlag.CACHE_TEARFLAG)
@@ -84,6 +84,18 @@ function mod_functions.onUpdate()
 end
 
 function mod_functions.postPeffectUpdate()
+  local player = Isaac.GetPlayer(0);
+
+  if not player:HasCollectible(mod_items.DragonHoardItem) then
+    return;
+  end
+
+  player:AddCacheFlags(CacheFlag.CACHE_DAMAGE)
+  player:AddCacheFlags(CacheFlag.CACHE_FIREDELAY)
+  player:AddCacheFlags(CacheFlag.CACHE_SHOTSPEED)
+  player:AddCacheFlags(CacheFlag.CACHE_LUCK)
+  player:EvaluateItems()
+
 end
 
 function mod_functions.entityTakeDmg(entity, dmg_amount, dmg_flag, dmg_src, dmg_countdown)
