@@ -1,3 +1,4 @@
+---@diagnostic disable: inject-field
 local mod_items = require("scripts.mod_items")
 local pony = require("scripts.pony")
 local utils = require("scripts.utils")
@@ -42,7 +43,7 @@ function mod_functions.useDragonWings()
 end
 
 function mod_functions.onUpdate()
-  local player = Isaac.GetPlayer(0);
+  local player = Isaac.GetPlayer(0); 
 
   if player:GetName() ~= "Pony" then
     return;
