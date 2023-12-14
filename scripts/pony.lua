@@ -14,6 +14,16 @@ pony.custom_libra_costume_id = Isaac.GetCostumeIdByPath("gfx/characters/custom_l
 pony.custom_uranus_costume_id = Isaac.GetCostumeIdByPath("gfx/characters/custom_uranus.anm2")
 pony.custom_varicose_veins_costume_id = Isaac.GetCostumeIdByPath("gfx/characters/custom_varicoseveins.anm2")
 
+pony.DAMAGE = -1.0;
+pony.FIREDELAY = -1.0;
+pony.SHOOTSPEED = -0.2;
+pony.TEARHEIGHT = 2;
+pony.TEARFALLINGSPEED = 0;
+pony.LUCK = -0.5;
+pony.FLYING = false;
+pony.TEARFLAG = 0;
+pony.TEARCOLOR = Color(0.0, 1.0, 0.5, 1.0, 0, 0, 0);
+
 function pony.applyCostume(player)
   if player:GetName() ~= "Pony" then
     return
