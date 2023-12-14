@@ -1,4 +1,5 @@
 local utils = require("scripts.utils")
+local mod_items = require("scripts.mod_items")
 
 local pony = {}
 
@@ -24,35 +25,52 @@ pony.FLYING = false;
 pony.TEARFLAG = 0;
 pony.TEARCOLOR = Color(0.0, 1.0, 0.5, 1.0, 0, 0, 0);
 
+-- TODO: apply costumes reading a json file to improve code quality
 function pony.applyCostume(player)
   if player:GetName() ~= "Pony" then
-    return
+    return;
   end
 
-  local flyingItems = {
-    CollectibleType.COLLECTIBLE_FATE,
-    CollectibleType.COLLECTIBLE_HOLY_GRAIL,
-    CollectibleType.COLLECTIBLE_DOGMA,
-    CollectibleType.COLLECTIBLE_LORD_OF_THE_PIT,
-    CollectibleType.COLLECTIBLE_REVELATION
-  }
-
   if player.CanFly then
-    player:AddNullCostume(pony.hair_costume_id)
+    -- !! Validate if the item has `applyWhenFly` boolean to true
+    for itemId, costumeValues in pairs(mod_items.itemsToCostumeMap) do
+      local hasItem = player:HasCollectible(itemId);
 
-    if player:HasCollectible(CollectibleType.COLLECTIBLE_BRIMSTONE) then
-      player:AddNullCostume(pony.dragon_wings_brimstone_costume_id)
-    elseif utils.hasAnyCollectible(player, flyingItems) then
-      player:AddNullCostume(pony.dragon_wings_costume_id)
+      if hasItem then
+        for _, costumeValue in ipairs(costumeValues) do
+          if type(costumeValue) == "boolean" then
+            if not costumeValue then
+              break;
+            end
+          else
+            player:AddNullCostume(costumeValue);
+          end
+        end
+      end
     end
-  
-  else
-    player:TryRemoveNullCostume(pony.dragon_wings_costume_id)
-    player:TryRemoveNullCostume(pony.dragon_wings_brimstone_costume_id)
+  end
+
+  if not player.CanFly then
     player:AddNullCostume(pony.body_costume_id)
     player:AddNullCostume(pony.hair_costume_id)
   end
 
+  -- !! Apply custom costumes here
+  for itemId, costumeValues in pairs(mod_items.itemsToCostumeMap) do
+    local hasItem = player:HasCollectible(itemId);
+
+    if hasItem then
+      for _, costumeValue in ipairs(costumeValues) do
+        if type(costumeValue) == "boolean" and not costumeValue then
+          return;
+        end      
+
+        if type(costumeValue) ~= "boolean" then
+          player:AddNullCostume(costumeValue);
+        end
+      end
+    end
+  end
 end
 
 return pony
