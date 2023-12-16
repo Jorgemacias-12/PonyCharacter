@@ -25,51 +25,37 @@ pony.FLYING = false;
 pony.TEARFLAG = 0;
 pony.TEARCOLOR = Color(0.0, 1.0, 0.5, 1.0, 0, 0, 0);
 
--- TODO: apply costumes reading a json file to improve code quality
-function pony.applyCostume(player)
+function pony.init()
+  ---@class EntityPlayer
+  local player = Isaac.GetPlayer(0);
+
   if player:GetName() ~= "Pony" then
     return;
   end
 
-  if player.CanFly then
-    -- !! Validate if the item has `applyWhenFly` boolean to true
-    for itemId, costumeValues in pairs(mod_items.itemsToCostumeMap) do
-      local hasItem = player:HasCollectible(itemId);
+  -- Add pony initial items
+  pony.addInitialItems();
 
-      if hasItem then
-        for _, costumeValue in ipairs(costumeValues) do
-          if type(costumeValue) == "boolean" then
-            if not costumeValue then
-              break;
-            end
-          else
-            player:AddNullCostume(costumeValue);
-          end
-        end
-      end
-    end
-  end
+  -- Add initial costume
+  pony.applyCostume();
+end
 
+function pony.addInitialItems()
+  ---@class EntityPlayer
+  local player = Isaac.GetPlayer(0);
+
+  player:AddCollectible(mod_items.DragonHoardItem, 2, true);
+  player:SetPocketActiveItem(mod_items.DragonWingsItem, 2, true)
+end
+
+function pony.applyCostume()
+  ---@class EntityPlayer
+  local player = Isaac.GetPlayer(0);
+  
   if not player.CanFly then
-    player:AddNullCostume(pony.body_costume_id)
-    player:AddNullCostume(pony.hair_costume_id)
-  end
-
-  -- !! Apply custom costumes here
-  for itemId, costumeValues in pairs(mod_items.itemsToCostumeMap) do
-    local hasItem = player:HasCollectible(itemId);
-
-    if hasItem then
-      for _, costumeValue in ipairs(costumeValues) do
-        if type(costumeValue) == "boolean" and not costumeValue then
-          return;
-        end      
-
-        if type(costumeValue) ~= "boolean" then
-          player:AddNullCostume(costumeValue);
-        end
-      end
-    end
+    player:AddNullCostume(pony.dragon_hoard_costume_id);
+    player:AddNullCostume(pony.body_costume_id);
+    player:AddNullCostume(pony.hair_costume_id);
   end
 end
 
