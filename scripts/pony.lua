@@ -23,7 +23,7 @@ pony.TEARFALLINGSPEED = 0;
 pony.LUCK = -0.5;
 pony.FLYING = false;
 pony.TEARFLAG = 0;
-pony.TEARCOLOR = Color(0.0, 1.0, 0.5, 1.0, 0, 0, 0);
+pony.TEARCOLOR = Color(0.0, 1.0, 0.5, 1.0, 0, 0, 0)
 
 function pony.init()
   ---@class EntityPlayer
@@ -38,6 +38,9 @@ function pony.init()
 
   -- Add initial costume
   pony.applyCostume();
+
+  -- Add initial stats
+  pony.applyInitialStats();
 end
 
 function pony.addInitialItems()
@@ -57,6 +60,18 @@ function pony.applyCostume()
     player:AddNullCostume(pony.body_costume_id);
     player:AddNullCostume(pony.hair_costume_id);
   end
+end
+
+function pony.applyInitialStats()
+  ---@class EntityPlayer
+  local player = Isaac.GetPlayer(0);
+
+  player.Damage = player.Damage + pony.DAMAGE;
+  player.FireDelay = player.FireDelay + pony.FIREDELAY;
+  player.ShotSpeed = player.ShotSpeed + pony.SHOOTSPEED;
+  player.TearHeight = player.TearHeight + pony.TEARHEIGHT;
+  player.Luck = player.Luck + pony.LUCK;
+  player.TearColor = pony.TEARCOLOR;
 end
 
 return pony
