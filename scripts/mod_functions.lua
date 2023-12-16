@@ -1,12 +1,9 @@
----@diagnostic disable: inject-field
-local mod_items = require("scripts.mod_items")
 local pony = require("scripts.pony")
-local utils = require("scripts.utils")
 
 local mod_functions = {}
 
 function mod_functions.playerInit(entiy_player)
-  
+  pony.init();
 end
 
 function mod_functions.useDragonWings()
