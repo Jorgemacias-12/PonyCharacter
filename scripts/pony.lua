@@ -69,7 +69,7 @@ function pony.applyInitialStats()
 
   player.Damage = player.Damage + pony.DAMAGE;
   player.FireDelay = player.FireDelay + pony.FIREDELAY;
-  player.ShotSpeed = player.ShotSpeed + pony.SHOOTSPEED;
+  player.ShotSpeed = player.ShotSpeed + pony.SHOTSPEED;
   player.TearHeight = player.TearHeight + pony.TEARHEIGHT;
   player.Luck = player.Luck + pony.LUCK;
   player.TearColor = pony.TEARCOLOR;
@@ -117,7 +117,6 @@ function pony.updateStats(cacheFlag)
       player.CanFly = true;
     end
   end
-
 end
 
 return pony
