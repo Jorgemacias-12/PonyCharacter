@@ -24,7 +24,7 @@ Mod:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, mod_functions.postPeffectUp
 Mod:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG, mod_functions.entityTakeDmg, EntityType.ENTITY_PLAYER)
 
 -- This callback is triggered when a specific item is used. Replace 'your_item_id' with the actual item ID.
-Mod:AddCallback(ModCallbacks.MC_USE_ITEM, mod_functions.onUseItem, mod_items.DragonHoardItem)
+Mod:AddCallback(ModCallbacks.MC_USE_ITEM, mod_functions.onUseItem, mod_items.DragonWingsItem)
 
 -- This callback is used to re-evaluate certain cached values, like player stats, whenever they need updating.
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, mod_functions.evaluateCache)
