@@ -11,4 +11,10 @@ function utils.hasAnyCollectible(player, collectibles)
   return false
 end
 
+function utils.iterateTable(table)
+  for key, value in pairs(table) do
+    Isaac.ConsoleOutput("Clave: " .. tostring(key) .. ", valor: " .. tostring(value) .. '\n')
+  end
+end
+
 return utils;
