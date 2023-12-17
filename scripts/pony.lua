@@ -69,6 +69,9 @@ function pony.updateStats(cacheFlag)
     return;
   end
 
+  -- Modify pone used wings 
+  pony.UsedWings = true;
+
   -- Apply default pony stats
   if cacheFlag == CacheFlag.CACHE_DAMAGE then
     player.Damage = player.Damage + pony.DAMAGE

@@ -49,6 +49,8 @@ end
 function mod_functions.useItem(collectibleType, charge, player)
 end
 
+---@param player EntityPlayer
+---@param cacheFlag CacheFlag
 function mod_functions.evaluateCache(self, player, cacheFlag)
   pony.updateStats(cacheFlag);
 
@@ -113,6 +115,12 @@ function mod_functions.evaluateCache(self, player, cacheFlag)
         player.ShotSpeed = player.ShotSpeed + balanceValues.NormalShotSpeedCaps[2] / balanceValues.NormalShotSpeedCaps
         [1];
       end
+    end
+  end
+
+  if cacheFlag == CacheFlag.CACHE_FLYING then
+    if pony.UsedWings then
+      player.CanFly = true;
     end
   end
 
