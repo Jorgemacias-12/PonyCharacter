@@ -8,8 +8,32 @@ function mod_functions.playerInit(entiy_player)
   pony.init();
 end
 
-function mod_functions.onUseItem()
+---@param collectibleType CollectibleType
+---@param player EntityPlayer
+function mod_functions.onUseItem(_, collectibleType, charge, player)
+  print("onUseItem called")
+  print("CollectibleType:", collectibleType)
+  print("Player:", player)
 
+  if not player or collectibleType ~= mod_items.DragonWingsItem then
+    return;
+  end
+
+  local hasBrimstone = player:HasCollectible(CollectibleType.COLLECTIBLE_BRIMSTONE);
+
+  player:AddCacheFlags(CacheFlag.CACHE_FLYING)
+  player:AddCacheFlags(CacheFlag.CACHE_SPEED)
+  player:AddCacheFlags(CacheFlag.CACHE_TEARFLAG)
+
+
+  if hasBrimstone then
+    player:AddNullCostume(pony.dragon_wings_brimstone_costume_id)
+  else
+    player:AddNullCostume(pony.dragon_wings_costume_id)
+  end
+
+  player:EvaluateItems()
+  return true
 end
 
 function mod_functions.onUpdate()
