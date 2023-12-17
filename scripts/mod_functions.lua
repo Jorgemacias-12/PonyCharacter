@@ -8,7 +8,7 @@ function mod_functions.playerInit(entiy_player)
   pony.init();
 end
 
-function mod_functions.useDragonWings()
+function mod_functions.onUseItem()
 
 end
 
