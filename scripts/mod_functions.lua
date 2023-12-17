@@ -52,10 +52,6 @@ function mod_functions.evaluateCache(self, player, cacheFlag)
     36
   }
 
-  -- Debug 
-  Isaac.ConsoleOutput("Has DragonHoard: " .. tostring(hasDragonHoard) .. '\n');
-  Isaac.ConsoleOutput("Has BirthRight: " .. tostring(hasBirthRight) .. '\n');
-
   if hasDragonHoard then
     if cacheFlag == CacheFlag.CACHE_LUCK then
       player.Luck = player.Luck + playerCoins / balanceValues.LuckCap;
