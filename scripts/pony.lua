@@ -52,12 +52,26 @@ end
 function pony.applyCostume()
   ---@class EntityPlayer
   local player = Isaac.GetPlayer(0);
+
+  -- Default pony character skin
+  player:AddNullCostume(pony.dragon_hoard_costume_id);
+  player:AddNullCostume(pony.body_costume_id);
+  player:AddNullCostume(pony.hair_costume_id);
   
-  if not player.CanFly then
-    player:AddNullCostume(pony.dragon_hoard_costume_id);
-    player:AddNullCostume(pony.body_costume_id);
+  if player.CanFly then
+    local hasBrimstone = player:HasCollectible(CollectibleType.COLLECTIBLE_BRIMSTONE);
+
     player:AddNullCostume(pony.hair_costume_id);
+    if hasBrimstone then
+      player:AddNullCostume(pony.dragon_wings_brimstone_costume_id);
+    else
+      player:AddNullCostume(pony.dragon_wings_costume_id);
+    end
+
   end
+
+  -- TODO: Investigate how to add nullcostumes depending of the item, but in a smarter way.
+
 end
 
 function pony.updateStats(cacheFlag)
