@@ -39,8 +39,17 @@ end
 function mod_functions.onUpdate()
 end
 
-function mod_functions.postPeffectUpdate(currentPlayer)
+---@param player EntityPlayer
+function mod_functions.postPeffectUpdate(_, player)
+  local hasDragonHoard = player:HasCollectible(mod_items.DragonHoardItem);
 
+  if hasDragonHoard then
+    player:AddCacheFlags(CacheFlag.CACHE_DAMAGE)
+    player:AddCacheFlags(CacheFlag.CACHE_FIREDELAY)
+    player:AddCacheFlags(CacheFlag.CACHE_SHOTSPEED)
+    player:AddCacheFlags(CacheFlag.CACHE_LUCK)
+    player:EvaluateItems()
+  end
 end
 
 function mod_functions.entityTakeDmg(entity, dmg_amount, dmg_flag, dmg_src, dmg_countdown)
