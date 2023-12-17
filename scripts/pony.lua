@@ -39,9 +39,6 @@ function pony.init()
 
   -- Add initial costume
   pony.applyCostume();
-
-  -- Add initial stats
-  pony.applyInitialStats();
 end
 
 function pony.addInitialItems()
@@ -61,18 +58,6 @@ function pony.applyCostume()
     player:AddNullCostume(pony.body_costume_id);
     player:AddNullCostume(pony.hair_costume_id);
   end
-end
-
-function pony.applyInitialStats()
-  ---@class EntityPlayer
-  local player = Isaac.GetPlayer(0);
-
-  player.Damage = player.Damage + pony.DAMAGE;
-  player.FireDelay = player.FireDelay + pony.FIREDELAY;
-  player.ShotSpeed = player.ShotSpeed + pony.SHOTSPEED;
-  player.TearHeight = player.TearHeight + pony.TEARHEIGHT;
-  player.Luck = player.Luck + pony.LUCK;
-  player.TearColor = pony.TEARCOLOR;
 end
 
 function pony.updateStats(cacheFlag)
