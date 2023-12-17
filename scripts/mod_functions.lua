@@ -1,4 +1,6 @@
 local pony = require("scripts.pony")
+local utils = require("scripts.utils")
+local mod_items = require("scripts.mod_items")
 
 local mod_functions = {}
 
@@ -23,8 +25,8 @@ end
 function mod_functions.useItem(collectibleType, charge, player)
 end
 
-function mod_functions.evaluateCache(cacheFlag, player)
-  -- player.Damage = 100;
+function mod_functions.EvaluateCache(self, player, cacheFlag)
+  
 end
 
 return mod_functions
