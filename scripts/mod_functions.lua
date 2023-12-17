@@ -25,8 +25,8 @@ end
 function mod_functions.useItem(collectibleType, charge, player)
 end
 
-function mod_functions.EvaluateCache(self, player, cacheFlag)
-  
+function mod_functions.evaluateCache(self, player, cacheFlag)
+
 end
 
 return mod_functions
