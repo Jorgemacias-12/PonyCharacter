@@ -16,6 +16,7 @@ pony.custom_uranus_costume_id = Isaac.GetCostumeIdByPath("gfx/characters/custom_
 pony.custom_varicose_veins_costume_id = Isaac.GetCostumeIdByPath("gfx/characters/custom_varicoseveins.anm2")
 
 pony.DAMAGE = -1.0;
+pony.SPEED = 0;
 pony.FIREDELAY = -1.0;
 pony.SHOOTSPEED = -0.2;
 pony.TEARHEIGHT = 2;
@@ -72,6 +73,51 @@ function pony.applyInitialStats()
   player.TearHeight = player.TearHeight + pony.TEARHEIGHT;
   player.Luck = player.Luck + pony.LUCK;
   player.TearColor = pony.TEARCOLOR;
+end
+
+function pony.updateStats(cacheFlag)
+  
+  ---@class EntityPlayer 
+  local player = Isaac.GetPlayer(0);
+
+  if player:GetName() ~= "Pony" then
+    return;
+  end
+
+  -- Apply default pony stats
+  if cacheFlag == CacheFlag.CACHE_DAMAGE then
+    player.Damage = player.Damage + pony.DAMAGE
+  end
+  if cacheFlag == CacheFlag.CACHE_FIREDELAY then
+    player.MaxFireDelay = player.MaxFireDelay - pony.FIREDELAY
+  end
+  if cacheFlag == CacheFlag.CACHE_SHOTSPEED then
+    player.ShotSpeed = player.ShotSpeed + pony.SHOTSPEED
+  end
+  if cacheFlag == CacheFlag.CACHE_RANGE then
+    player.TearHeight = player.TearHeight - pony.TEARHEIGHT
+    player.TearFallingSpeed = player.TearFallingSpeed + pony.TEARFALLINGSPEED
+  end
+  if cacheFlag == CacheFlag.CACHE_SPEED then
+    player.MoveSpeed = player.MoveSpeed + pony.SPEED
+  end
+  if cacheFlag == CacheFlag.CACHE_LUCK then
+    player.Luck = player.Luck + pony.LUCK
+  end
+  if cacheFlag == CacheFlag.CACHE_TEARFLAG then
+    player.TearFlags = player.TearFlags | pony.TEARFLAG
+  end
+  if cacheFlag == CacheFlag.CACHE_TEARCOLOR then
+    player.TearColor = pony.TEARCOLOR
+  end
+
+  -- Allow to users to fly with dragon wings item
+  if cacheFlag == CacheFlag.CACHE_FLYING then
+    if pony.UsedWings then
+      player.CanFly = true;
+    end
+  end
+
 end
 
 return pony
