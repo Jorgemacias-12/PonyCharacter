@@ -37,6 +37,49 @@ function mod_functions.onUseItem(_, collectibleType, charge, player)
 end
 
 function mod_functions.onUpdate()
+
+  ---@class EntityPlayer
+  local player = Isaac.GetPlayer(0);
+
+  local game = Game();
+  local level = game:GetLevel();
+  local room = level:GetCurrentRoom();
+  local frameCount = room:GetFrameCount();
+
+  -- TODO: change costume efficiently
+
+  if frameCount == 1 then
+    if pony.UsedWings then
+      
+      local flyingCollectibles = {
+        CollectibleType.COLLECTIBLE_FATE,
+        CollectibleType.COLLECTIBLE_HOLY_GRAIL,
+        CollectibleType.COLLECTIBLE_DOGMA,
+        CollectibleType.COLLECTIBLE_LORD_OF_THE_PIT,
+        CollectibleType.COLLECTIBLE_REVELATION
+      }
+
+      local hasAnyFlyingCollectible = utils.hasAnyCollectible(player, flyingCollectibles);
+
+      if hasAnyFlyingCollectible then
+        pony.UsedWings = false;
+        player:AddCacheFlags(CacheFlag.CACHE_SPEED)
+        player:AddCacheFlags(CacheFlag.CACHE_TEARFLAG)
+      else
+        player.CanFly = false;
+
+        -- Remove flying costume
+        player:TryRemoveNullCostume(pony.dragon_wings_brimstone_costume_id);
+        player:TryRemoveNullCostume(pony.dragon_wings_costume_id);
+
+        player:AddCacheFlags(CacheFlag.CACHE_FLYING)
+        player:AddCacheFlags(CacheFlag.CACHE_SPEED)
+        player:AddCacheFlags(CacheFlag.CACHE_TEARFLAG)
+      end
+
+      player:EvaluateItems();
+    end
+  end
 end
 
 ---@param player EntityPlayer
