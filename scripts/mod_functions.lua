@@ -189,4 +189,68 @@ function mod_functions.evaluateCache(self, player, cacheFlag)
   -- end
 end
 
+function mod_functions.onNPCDeath()
+
+  Isaac.ConsoleOutput("Asi es ahora esto es minecraft \n")
+  
+  local spawnChance = math.random(1, 25);
+  
+  Isaac.ConsoleOutput("Spawn chance: " .. tostring(spawnChance) .. "\n")
+
+  local HEART_SPAWN_NUMBER = 24;
+  local HELP_ITEM_SPAWN_NUMBER = 8;
+
+  ---@class EntityPlayer
+  local player = Isaac.GetPlayer(0);
+
+  local isPony = player:GetName() == "Pony";
+  local hasBirthRight = player:HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT);
+
+  if isPony and hasBirthRight then
+    local roomEntities = Isaac.GetRoomEntities();
+
+    for _, entity in pairs(roomEntities) do
+      local data = entity:GetData();
+      
+      entity = entity:ToNPC();
+
+      if entity and entity:IsActiveEnemy(true) then
+        if entity:IsDead() and not data.Died then
+          data.Died = true;
+
+          local entityToSpawn;
+
+          Isaac.ConsoleOutput("Spawneando moneda \n")
+          
+          if spawnChance <= HELP_ITEM_SPAWN_NUMBER then
+            entityToSpawn = Isaac.Spawn(
+              EntityType.ENTITY_PICKUP,
+              PickupVariant.PICKUP_COIN,
+              CoinSubType.COIN_PENNY,
+              entity.Position,
+              entity.Velocity,
+              nil
+            );
+          end
+          
+          if spawnChance == HEART_SPAWN_NUMBER then
+            Isaac.ConsoleOutput("Spawneando corazon \n")
+
+            entityToSpawn = Isaac.Spawn(
+              EntityType.ENTITY_PICKUP,
+              PickupVariant.PICKUP_HEART,
+              HeartSubType.HEART_HALF_SOUL,
+              entity.Position,
+              entity.Velocity,
+              nil
+            );
+          end
+
+          entityToSpawn:GetData().Timer = 60;
+        end
+      end
+    end
+  end
+end
+
 return mod_functions

@@ -28,3 +28,5 @@ Mod:AddCallback(ModCallbacks.MC_USE_ITEM, mod_functions.onUseItem, mod_items.Dra
 
 -- This callback is used to re-evaluate certain cached values, like player stats, whenever they need updating.
 Mod:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, mod_functions.evaluateCache)
+
+Mod:AddCallback(ModCallbacks.MC_POST_NPC_DEATH, mod_functions.onNPCDeath)
