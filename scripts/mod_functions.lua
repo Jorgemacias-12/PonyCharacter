@@ -33,11 +33,11 @@ function mod_functions.onUseItem(_, collectibleType, charge, player)
   end
 
   player:EvaluateItems()
+
   return true
 end
 
 function mod_functions.onUpdate()
-
   ---@class EntityPlayer
   local player = Isaac.GetPlayer(0);
 
@@ -47,10 +47,10 @@ function mod_functions.onUpdate()
   local frameCount = room:GetFrameCount();
 
   -- TODO: change costume efficiently
+  pony:updateCostume();
 
   if frameCount == 1 then
     if pony.UsedWings then
-      
       local flyingCollectibles = {
         CollectibleType.COLLECTIBLE_FATE,
         CollectibleType.COLLECTIBLE_HOLY_GRAIL,
@@ -67,6 +67,7 @@ function mod_functions.onUpdate()
         player:AddCacheFlags(CacheFlag.CACHE_TEARFLAG)
       else
         player.CanFly = false;
+        pony.UsedWings = false;
 
         -- Remove flying costume
         player:TryRemoveNullCostume(pony.dragon_wings_brimstone_costume_id);
@@ -95,10 +96,25 @@ function mod_functions.postPeffectUpdate(_, player)
   end
 end
 
-function mod_functions.entityTakeDmg(entity, dmg_amount, dmg_flag, dmg_src, dmg_countdown)
-end
-
-function mod_functions.useItem(collectibleType, charge, player)
+function mod_functions.entityTakeDmg(_, entity, dmg_amount, dmg_flag, dmg_src, dmg_countdown)  
+  ---@class EntityPlayer
+  local player = Isaac.GetPlayer(0);
+  
+  local hasDragonHoard = player:HasCollectible(mod_items.DragonHoardItem);
+  
+  local playerCoins = player:GetNumCoins();
+  
+  local coinThreshold = 61;
+  
+  if hasDragonHoard and dmg_src ~= nil and entity.Type == 1 and dmg_flag ~= DamageFlag.DAMAGE_FAKE and not utils.isSelfDamage(dmg_flag) then
+    if playerCoins < coinThreshold then
+      player:AddCoins(-1)
+    end
+    
+    if playerCoins >= coinThreshold then
+      player:AddCoins(-2)
+    end
+  end
 end
 
 ---@param player EntityPlayer
@@ -138,10 +154,8 @@ function mod_functions.evaluateCache(self, player, cacheFlag)
     if cacheFlag == CacheFlag.CACHE_DAMAGE then
       player.Damage = player.Damage + playerCoins / balanceValues.DamageCap;
     end
-    
-    if cacheFlag == CacheFlag.CACHE_FIREDELAY then      
-      
 
+    if cacheFlag == CacheFlag.CACHE_FIREDELAY then
       if hasBirthRight then
         player.MaxFireDelay = player.MaxFireDelay - playerCoins / balanceValues.BirthRightFireDelayCap;
       else
@@ -150,7 +164,8 @@ function mod_functions.evaluateCache(self, player, cacheFlag)
         end
 
         if playerCoins >= coinCheckValues[1] then
-          player.MaxFireDelay = player.MaxFireDelay - balanceValues.NormalFireDelayCaps[1] / balanceValues.NormalFireDelayCaps[2];
+          player.MaxFireDelay = player.MaxFireDelay -
+          balanceValues.NormalFireDelayCaps[1] / balanceValues.NormalFireDelayCaps[2];
         end
       end
     end
@@ -165,7 +180,7 @@ function mod_functions.evaluateCache(self, player, cacheFlag)
       end
       if playerCoins >= coinCheckValues[2] then
         player.ShotSpeed = player.ShotSpeed + balanceValues.NormalShotSpeedCaps[2] / balanceValues.NormalShotSpeedCaps
-        [1];
+            [1];
       end
     end
   end
@@ -190,11 +205,10 @@ function mod_functions.evaluateCache(self, player, cacheFlag)
 end
 
 function mod_functions.onNPCDeath()
+  Isaac.ConsoleOutput("onNPCDeath called \n")
 
-  Isaac.ConsoleOutput("Asi es ahora esto es minecraft \n")
-  
   local spawnChance = math.random(1, 25);
-  
+
   Isaac.ConsoleOutput("Spawn chance: " .. tostring(spawnChance) .. "\n")
 
   local HEART_SPAWN_NUMBER = 24;
@@ -211,7 +225,7 @@ function mod_functions.onNPCDeath()
 
     for _, entity in pairs(roomEntities) do
       local data = entity:GetData();
-      
+
       entity = entity:ToNPC();
 
       if entity and entity:IsActiveEnemy(true) then
@@ -221,8 +235,10 @@ function mod_functions.onNPCDeath()
           local entityToSpawn;
 
           Isaac.ConsoleOutput("Spawneando moneda \n")
-          
+
           if spawnChance <= HELP_ITEM_SPAWN_NUMBER then
+            Isaac.ConsoleOutput("spawn change coin \n");
+
             entityToSpawn = Isaac.Spawn(
               EntityType.ENTITY_PICKUP,
               PickupVariant.PICKUP_COIN,
@@ -232,7 +248,7 @@ function mod_functions.onNPCDeath()
               nil
             );
           end
-          
+
           if spawnChance == HEART_SPAWN_NUMBER then
             Isaac.ConsoleOutput("Spawneando corazon \n")
 
