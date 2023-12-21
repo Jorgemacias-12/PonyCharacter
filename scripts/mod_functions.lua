@@ -1,86 +1,20 @@
 local pony = require("scripts.pony")
 local utils = require("scripts.utils")
 local mod_items = require("scripts.mod_items")
-
 local mod_functions = {}
 
 function mod_functions.playerInit(entiy_player)
   pony.init();
 end
 
+function mod_functions.onUpdate() 
+
+end
+
 ---@param collectibleType CollectibleType
 ---@param player EntityPlayer
 function mod_functions.onUseItem(_, collectibleType, charge, player)
-  print("onUseItem called")
-  print("CollectibleType:", collectibleType)
-  print("Player:", player)
-
-  if not player or collectibleType ~= mod_items.DragonWingsItem then
-    return;
-  end
-
-  local hasBrimstone = player:HasCollectible(CollectibleType.COLLECTIBLE_BRIMSTONE);
-
-  player:AddCacheFlags(CacheFlag.CACHE_FLYING)
-  player:AddCacheFlags(CacheFlag.CACHE_SPEED)
-  player:AddCacheFlags(CacheFlag.CACHE_TEARFLAG)
-
-
-  if hasBrimstone then
-    player:AddNullCostume(pony.dragon_wings_brimstone_costume_id)
-  else
-    player:AddNullCostume(pony.dragon_wings_costume_id)
-  end
-
-  player:EvaluateItems()
-
-  return true
-end
-
-function mod_functions.onUpdate()
-  ---@class EntityPlayer
-  local player = Isaac.GetPlayer(0);
-
-  local game = Game();
-  local level = game:GetLevel();
-  local room = level:GetCurrentRoom();
-  local frameCount = room:GetFrameCount();
-
-  -- TODO: change costume efficiently
-  pony:updateCostume();
-
-  if frameCount == 1 then
-    if pony.UsedWings then
-      local flyingCollectibles = {
-        CollectibleType.COLLECTIBLE_FATE,
-        CollectibleType.COLLECTIBLE_HOLY_GRAIL,
-        CollectibleType.COLLECTIBLE_DOGMA,
-        CollectibleType.COLLECTIBLE_LORD_OF_THE_PIT,
-        CollectibleType.COLLECTIBLE_REVELATION
-      }
-
-      local hasAnyFlyingCollectible = utils.hasAnyCollectible(player, flyingCollectibles);
-
-      if hasAnyFlyingCollectible then
-        pony.UsedWings = false;
-        player:AddCacheFlags(CacheFlag.CACHE_SPEED)
-        player:AddCacheFlags(CacheFlag.CACHE_TEARFLAG)
-      else
-        player.CanFly = false;
-        pony.UsedWings = false;
-
-        -- Remove flying costume
-        player:TryRemoveNullCostume(pony.dragon_wings_brimstone_costume_id);
-        player:TryRemoveNullCostume(pony.dragon_wings_costume_id);
-
-        player:AddCacheFlags(CacheFlag.CACHE_FLYING)
-        player:AddCacheFlags(CacheFlag.CACHE_SPEED)
-        player:AddCacheFlags(CacheFlag.CACHE_TEARFLAG)
-      end
-
-      player:EvaluateItems();
-    end
-  end
+  
 end
 
 ---@param player EntityPlayer
@@ -96,21 +30,21 @@ function mod_functions.postPeffectUpdate(_, player)
   end
 end
 
-function mod_functions.entityTakeDmg(_, entity, dmg_amount, dmg_flag, dmg_src, dmg_countdown)  
+function mod_functions.entityTakeDmg(_, entity, dmg_amount, dmg_flag, dmg_src, dmg_countdown)
   ---@class EntityPlayer
   local player = Isaac.GetPlayer(0);
-  
+
   local hasDragonHoard = player:HasCollectible(mod_items.DragonHoardItem);
-  
+
   local playerCoins = player:GetNumCoins();
-  
+
   local coinThreshold = 61;
-  
+
   if hasDragonHoard and dmg_src ~= nil and entity.Type == 1 and dmg_flag ~= DamageFlag.DAMAGE_FAKE and not utils.isSelfDamage(dmg_flag) then
     if playerCoins < coinThreshold then
       player:AddCoins(-1)
     end
-    
+
     if playerCoins >= coinThreshold then
       player:AddCoins(-2)
     end
@@ -165,7 +99,7 @@ function mod_functions.evaluateCache(self, player, cacheFlag)
 
         if playerCoins >= coinCheckValues[1] then
           player.MaxFireDelay = player.MaxFireDelay -
-          balanceValues.NormalFireDelayCaps[1] / balanceValues.NormalFireDelayCaps[2];
+              balanceValues.NormalFireDelayCaps[1] / balanceValues.NormalFireDelayCaps[2];
         end
       end
     end
@@ -186,22 +120,28 @@ function mod_functions.evaluateCache(self, player, cacheFlag)
   end
 
   if cacheFlag == CacheFlag.CACHE_FLYING then
-    if pony.UsedWings then
+    -- !! check if the player has dragon wings item to allow to fly and check if also is allowed for him to fly.
+
+    local hasDragonWings = player:HasCollectible(mod_items.DragonWingsItem);
+
+    if hasDragonWings and pony.UsedWings then
       player.CanFly = true;
+    else
+      player.CanFly = false;
     end
   end
 
   -- !! Refactor to apply this when dragon wings are in use.
-  -- if player.CanFly then
-  --   if cacheFlag == CacheFlag.CACHE_SPEED then
-  --     local speedIncrement = 0.3;
-  --     player.MoveSpeed = player.MoveSpeed + speedIncrement;
-  --   end
 
-  --   if cacheFlag == CacheFlag.CACHE_TEARFLAG then
-  --     player.TearFlags = player.TearFlags | TearFlags.TEAR_SPECTRAL
-  --   end
-  -- end
+  if cacheFlag == CacheFlag.CACHE_SPEED and player.CanFly and pony.UsedWings then
+    local speedIncrement = 0.3;
+
+    player.MoveSpeed = player.MoveSpeed + speedIncrement;
+  end
+
+  if cacheFlag == CacheFlag.CACHE_TEARFLAG then
+    player.TearFlags = player.TearFlags | TearFlags.TEAR_SPECTRAL
+  end
 end
 
 function mod_functions.onNPCDeath()
