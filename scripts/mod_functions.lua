@@ -22,12 +22,50 @@ function mod_functions.onUpdate()
   end
 
   pony:updateCostume(player)
+
+  mod_functions.disableFlyInNextRoom()
+end
+
+function mod_functions.disableFlyInNextRoom()
+
+  print("Being called correctly");
+
+  ---@class EntityPlayer
+  local player = Isaac.GetPlayer(0);
+
+  local game = Game()
+  local level = game:GetLevel()
+  local currentRoom = level:GetCurrentRoom()
+  local frameCount = currentRoom:GetFrameCount()
+
+  local FIRST_FRAME = 1
+
+  if frameCount == FIRST_FRAME and pony.UsedWings then
+    local hasFlyItem = utils.hasAnyCollectible(player, mod_items.flyItems);
+    
+    player:AddCacheFlags(CacheFlag.CACHE_SPEED);
+    player:AddCacheFlags(CacheFlag.CACHE_TEARFLAG);
+    
+    if hasFlyItem then
+      pony.UsedWings = false
+      
+      player:EvaluateItems()
+    else 
+      pony.UsedWings = false
+      player.CanFly = false
+
+      player:AddCacheFlags(CacheFlag.CACHE_FLYING);
+      player:AddCacheFlags(CacheFlag.CACHE_TEARFLAG);
+
+      player:EvaluateItems()
+    end
+  end
 end
 
 ---@param collectibleType CollectibleType
 ---@param player EntityPlayer
 function mod_functions.onUseItem(_, collectibleType, charge, player)
-
+  -- TODO: not working as expected
 end
 
 ---@param player EntityPlayer
