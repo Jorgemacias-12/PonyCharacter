@@ -1,20 +1,33 @@
 local pony = require("scripts.pony")
 local utils = require("scripts.utils")
 local mod_items = require("scripts.mod_items")
+local costumes  = require("scripts.costumes")
 local mod_functions = {}
 
 function mod_functions.playerInit(entiy_player)
   pony.init();
 end
 
-function mod_functions.onUpdate() 
+function mod_functions.onUpdate()
 
+  Isaac.ConsoleOutput("onUpdate called \n");
+
+  ---@class EntityPlayer
+  local player = Isaac.GetPlayer(0);
+
+  local isPony = player:GetName() == "Pony";
+
+  if not isPony then
+    return;
+  end
+
+  pony:updateCostume(player)
 end
 
 ---@param collectibleType CollectibleType
 ---@param player EntityPlayer
 function mod_functions.onUseItem(_, collectibleType, charge, player)
-  
+
 end
 
 ---@param player EntityPlayer
