@@ -52,4 +52,12 @@ mod_items.itemsToCostumeMap = {
   },
 }
 
+mod_items.flyItems = {
+  CollectibleType.COLLECTIBLE_FATE,
+  CollectibleType.COLLECTIBLE_HOLY_GRAIL,
+  CollectibleType.COLLECTIBLE_DOGMA,
+  CollectibleType.COLLECTIBLE_LORD_OF_THE_PIT,
+  CollectibleType.COLLECTIBLE_REVELATION
+}
+
 return mod_items;
