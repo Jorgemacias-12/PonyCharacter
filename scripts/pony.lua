@@ -1,32 +1,32 @@
-local json = require("json")
-local utils = require("scripts.utils")
-local mod_items = require("scripts.mod_items")
-local costumes  = require("scripts.costumes")
+local json                             = require("json")
+local utils                            = require("scripts.utils")
+local mod_items                        = require("scripts.mod_items")
+local costumes                         = require("scripts.costumes")
 
-local pony = {}
+local pony                             = {}
 
-pony.UsedWings = false
-pony.hair_costume_id = Isaac.GetCostumeIdByPath("gfx/characters/PonyHair.anm2")
-pony.body_costume_id = Isaac.GetCostumeIdByPath("gfx/characters/PonyBody.anm2")
-pony.dragon_hoard_costume_id = Isaac.GetCostumeIdByPath("gfx/characters/DragonHoard.anm2")
-pony.dragon_hoard_alt_costume_id = Isaac.GetCostumeIdByPath("gfx/characters/DragonHoard_ALT.anm2") -- Shows only the WalkUp tail animation,
-pony.dragon_wings_costume_id = Isaac.GetCostumeIdByPath("gfx/characters/DragonWings.anm2")         -- Useful for items that distort the body.
+pony.UsedWings                         = false
+pony.hair_costume_id                   = Isaac.GetCostumeIdByPath("gfx/characters/PonyHair.anm2")
+pony.body_costume_id                   = Isaac.GetCostumeIdByPath("gfx/characters/PonyBody.anm2")
+pony.dragon_hoard_costume_id           = Isaac.GetCostumeIdByPath("gfx/characters/DragonHoard.anm2")
+pony.dragon_hoard_alt_costume_id       = Isaac.GetCostumeIdByPath("gfx/characters/DragonHoard_ALT.anm2") -- Shows only the WalkUp tail animation,
+pony.dragon_wings_costume_id           = Isaac.GetCostumeIdByPath("gfx/characters/DragonWings.anm2")     -- Useful for items that distort the body.
 pony.dragon_wings_brimstone_costume_id = Isaac.GetCostumeIdByPath("gfx/characters/DragonWingsBrimstone.anm2")
-pony.custom_infestation_costume_id = Isaac.GetCostumeIdByPath("gfx/characters/custom_infestation.anm2")
-pony.custom_libra_costume_id = Isaac.GetCostumeIdByPath("gfx/characters/custom_libra.anm2")
-pony.custom_uranus_costume_id = Isaac.GetCostumeIdByPath("gfx/characters/custom_uranus.anm2")
-pony.custom_varicose_veins_costume_id = Isaac.GetCostumeIdByPath("gfx/characters/custom_varicoseveins.anm2")
+pony.custom_infestation_costume_id     = Isaac.GetCostumeIdByPath("gfx/characters/custom_infestation.anm2")
+pony.custom_libra_costume_id           = Isaac.GetCostumeIdByPath("gfx/characters/custom_libra.anm2")
+pony.custom_uranus_costume_id          = Isaac.GetCostumeIdByPath("gfx/characters/custom_uranus.anm2")
+pony.custom_varicose_veins_costume_id  = Isaac.GetCostumeIdByPath("gfx/characters/custom_varicoseveins.anm2")
 
-pony.DAMAGE = -1.0;
-pony.SPEED = 0;
-pony.FIREDELAY = -1.0;
-pony.SHOTSPEED = -0.2;
-pony.TEARHEIGHT = 2;
-pony.TEARFALLINGSPEED = 0;
-pony.LUCK = -0.5;
-pony.FLYING = false;
-pony.TEARFLAG = 0;
-pony.TEARCOLOR = Color(0.0, 1.0, 0.5, 1.0, 0, 0, 0)
+pony.DAMAGE                            = -1.0;
+pony.SPEED                             = 0;
+pony.FIREDELAY                         = -1.0;
+pony.SHOTSPEED                         = -0.2;
+pony.TEARHEIGHT                        = 2;
+pony.TEARFALLINGSPEED                  = 0;
+pony.LUCK                              = -0.5;
+pony.FLYING                            = false;
+pony.TEARFLAG                          = 0;
+pony.TEARCOLOR                         = Color(0.0, 1.0, 0.5, 1.0, 0, 0, 0)
 
 function pony.init()
   ---@class EntityPlayer
@@ -52,19 +52,24 @@ function pony.addInitialItems()
 end
 
 function pony.applyCostume()
+  -- !! Only apply default pony costume
+  ---@class EntityPlayer
+  local player = Isaac.GetPlayer(0);
 
+  player:AddNullCostume(pony.body_costume_id);
+  player:AddNullCostume(pony.hair_costume_id);
+  player:AddNullCostume(pony.dragon_hoard_costume_id);
 end
 
 function pony.updateStats(cacheFlag)
-  
-  ---@class EntityPlayer 
+  ---@class EntityPlayer
   local player = Isaac.GetPlayer(0);
 
   if player:GetName() ~= "Pony" then
     return;
   end
 
-  -- Modify pone used wings 
+  -- Modify pone used wings
   pony.UsedWings = true;
 
   -- Apply default pony stats
@@ -102,8 +107,39 @@ function pony.updateStats(cacheFlag)
   end
 end
 
-function pony:updateCostume()
+---@param player EntityPlayer
+function pony:updateCostume(player)
+  for index, item in ipairs(costumes.itemCostumes) do
+    local hasItem = player:HasCollectible(item.collectibleType);
 
+    if hasItem then
+
+      print("Has item \n" .. item.collectibleType);
+
+      local animation = Isaac.GetItemConfig():GetCollectible(item.collectibleType);
+      
+      local spriteToApply
+
+      -- !! Check if player is flying and apply flying sprite 
+      if player:IsFlying() then
+        spriteToApply = item.spritePaths.withWings;
+      else
+        spriteToApply = item.spritePaths.withoutWings;
+      end
+
+      if not spriteToApply then
+        spriteToApply = item.spritePaths.default;
+      end
+
+      -- !! Finally apply the selected sprite
+      if spriteToApply then
+        player:ReplaceCostumeSprite(animation, spriteToApply, 0);
+        print("Sprite" .. item.collectibleType .. " applied \n")
+      else
+        print("Failed to apply sprite" .. item.collectibleType .. "\n")
+      end
+    end
+  end
 end
 
 return pony
