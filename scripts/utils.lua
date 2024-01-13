@@ -1,3 +1,8 @@
+-- Utils.lua
+-- Author: Jorge macias
+-- Description: Contains utility functions for the mod
+-- Version: 0.0.1
+
 local utils = {}
 
 function utils.hasAnyCollectible(player, collectibles)
