@@ -42,7 +42,7 @@ function utils.isSelfDamage(damageFlags)
     ['BadTrip'] = DamageFlag.DAMAGE_NOKILL | DamageFlag.DAMAGE_INVINCIBLE | DamageFlag.DAMAGE_NO_PENALTIES
   }
 
-  for source, flags in pairs(selfDamageFlags) do
+  for _, flags in pairs(selfDamageFlags) do
     if damageFlags == flags then
       return true
     end
