@@ -5,6 +5,10 @@
 
 local utils = {}
 
+--- Gets the player and the collectibles that you want to check if the player has any of these items
+--- @param player EntityPlayer
+--- @param collectibles table
+--- @usage This function is used when you want to check if the player has a list of items (not at the same time)
 function utils.hasAnyCollectible(player, collectibles)
   for _, collectible in ipairs(collectibles) do
     if player:HasCollectible(collectible) then
