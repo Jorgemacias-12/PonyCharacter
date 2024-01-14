@@ -10,8 +10,6 @@ end
 
 function mod_functions.onUpdate()
 
-  Isaac.ConsoleOutput("onUpdate called \n");
-
   ---@class EntityPlayer
   local player = Isaac.GetPlayer(0);
 
@@ -27,8 +25,6 @@ function mod_functions.onUpdate()
 end
 
 function mod_functions.disableFlyInNextRoom()
-
-  print("Being called correctly");
 
   ---@class EntityPlayer
   local player = Isaac.GetPlayer(0);
