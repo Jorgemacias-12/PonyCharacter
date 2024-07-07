@@ -4,8 +4,9 @@ local mod_items = require("scripts.mod_items")
 local costumes  = require("scripts.costumes")
 local mod_functions = {}
 
-function mod_functions.playerInit(entiy_player)
-  pony.init();
+---@class EntityPlayer
+function mod_functions.playerInit(_, player)
+  pony.init(_, player);
 end
 
 function mod_functions.onUpdate()
@@ -61,7 +62,23 @@ end
 ---@param collectibleType CollectibleType
 ---@param player EntityPlayer
 function mod_functions.onUseItem(_, collectibleType, charge, player)
-  -- TODO: not working as expected
+  local player = Isaac.GetPlayer(0)
+
+  if player:HasCollectible(CollectibleType.COLLECTIBLE_BRIMSTONE) then
+    player:AddCacheFlags(CacheFlag.CACHE_FLYING)
+    player:AddCacheFlags(CacheFlag.CACHE_SPEED)
+    player:AddCacheFlags(CacheFlag.CACHE_TEARFLAG)
+    player:AddNullCostume(pony.dragon_wings_brimstone_costume_id)
+    player:EvaluateItems()
+  else
+    player:AddCacheFlags(CacheFlag.CACHE_FLYING)
+    player:AddCacheFlags(CacheFlag.CACHE_SPEED)
+    player:AddCacheFlags(CacheFlag.CACHE_TEARFLAG)
+    player:AddNullCostume(pony.dragon_wings_costume_id)
+    player:EvaluateItems()
+  end 
+
+  return true
 end
 
 ---@param player EntityPlayer
