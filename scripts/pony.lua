@@ -69,9 +69,6 @@ function pony.updateStats(cacheFlag)
     return;
   end
 
-  -- Modify pone used wings
-  pony.UsedWings = true;
-
   -- Apply default pony stats
   if cacheFlag == CacheFlag.CACHE_DAMAGE then
     player.Damage = player.Damage + pony.DAMAGE
@@ -109,37 +106,36 @@ end
 
 ---@param player EntityPlayer
 function pony:updateCostume(player)
-  for index, item in ipairs(costumes.itemCostumes) do
-    local hasItem = player:HasCollectible(item.collectibleType);
 
-    if hasItem then
+  -- local costume = costumes.animations[1].costume;
+  -- for _, costumePart in ipairs(costume) do
+  --   print(costumePart)
 
-      print("Has item \n" .. item.collectibleType);
+  --   player:AddNullCostume(costumePart);
+  -- end
 
-      local animation = Isaac.GetItemConfig():GetCollectible(item.collectibleType);
-      
-      local spriteToApply
+  -- if player:HasCollectible(mod_items.DragonHoardItem) then
 
-      -- !! Check if player is flying and apply flying sprite 
-      if player:IsFlying() then
-        spriteToApply = item.spritePaths.withWings;
-      else
-        spriteToApply = item.spritePaths.withoutWings;
-      end
 
-      if not spriteToApply then
-        spriteToApply = item.spritePaths.default;
-      end
+  --   end
+  -- end
 
-      -- !! Finally apply the selected sprite
-      if spriteToApply then
-        player:ReplaceCostumeSprite(animation, spriteToApply, 0);
-        print("Sprite" .. item.collectibleType .. " applied \n")
-      else
-        print("Failed to apply sprite" .. item.collectibleType .. "\n")
-      end
+  for _, item in ipairs(costumes.items) do
+    if player:HasCollectible(item.CollectibleType) then
+      local collectible = item.CollectibleType
+      local spritePaths = item.spritePaths
+
+      local itemConfig = Isaac.GetItemConfig():GetCollectible(collectible)
+      local spritePath = pony.UsedWings and spritePaths.withWings or spritePaths.default
+
+      player:ReplaceCostumeSprite(itemConfig, spritePath, pony.UsedWings and 1 or 0)
     end
   end
+
+  -- -- Apply dragon hoard tail costume
+  -- if player:HasCollectible(mod_items.DragonWingsItem) then
+  --   player:AddNullCostume(pony.dragon_hoard_alt_costume_id);
+  -- end
 end
 
 return pony
