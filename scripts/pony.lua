@@ -28,19 +28,16 @@ pony.FLYING                            = false;
 pony.TEARFLAG                          = 0;
 pony.TEARCOLOR                         = Color(0.0, 1.0, 0.5, 1.0, 0, 0, 0)
 
-function pony.init()
-  ---@class EntityPlayer
-  local player = Isaac.GetPlayer(0);
 
-  if player:GetName() ~= "Pony" then
-    return;
+function pony.init(self, player)
+  local playerType = Isaac.GetPlayerTypeByName("Pony")
+  if player:GetPlayerType() == playerType then
+    -- Add pony initial items
+    pony.addInitialItems();
+  
+    -- Add initial costume
+    pony.applyCostume();
   end
-
-  -- Add pony initial items
-  pony.addInitialItems();
-
-  -- Add initial costume
-  pony.applyCostume();
 end
 
 function pony.addInitialItems()
@@ -106,20 +103,6 @@ end
 
 ---@param player EntityPlayer
 function pony:updateCostume(player)
-
-  -- local costume = costumes.animations[1].costume;
-  -- for _, costumePart in ipairs(costume) do
-  --   print(costumePart)
-
-  --   player:AddNullCostume(costumePart);
-  -- end
-
-  -- if player:HasCollectible(mod_items.DragonHoardItem) then
-
-
-  --   end
-  -- end
-
   for _, item in ipairs(costumes.items) do
     if player:HasCollectible(item.CollectibleType) then
       local collectible = item.CollectibleType
@@ -128,11 +111,13 @@ function pony:updateCostume(player)
       local itemConfig = Isaac.GetItemConfig():GetCollectible(collectible)
       local spritePath = pony.UsedWings and spritePaths.withWings or spritePaths.default
 
+      print(spritePaths)
+
       player:ReplaceCostumeSprite(itemConfig, spritePath, pony.UsedWings and 1 or 0)
     end
   end
 
-  -- -- Apply dragon hoard tail costume
+  -- Apply dragon hoard tail costume
   -- if player:HasCollectible(mod_items.DragonWingsItem) then
   --   player:AddNullCostume(pony.dragon_hoard_alt_costume_id);
   -- end
