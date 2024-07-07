@@ -222,6 +222,20 @@ costumes.items = {
       withWings = nil,
     }
   },
+  {
+    CollectibleType = CollectibleType.COLLECTIBLE_DADS_LOST_COIN,
+    spritePaths = {
+      default = "gfx/characters/costumes/costume_dadslostcoin.png",
+      withWings = nil,
+	}
+  },
+  {
+    CollectibleType = CollectibleType.COLLECTIBLE_NUMBER_ONE,
+    spritePaths = {
+      default = "gfx/characters/costumes/costume_numberone.png",
+      withWings = nil,
+	}
+  }
 }
 
 return costumes
